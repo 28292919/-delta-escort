@@ -4,24 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>三角洲护航</title>
+
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
-  font-family:Arial,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",Arial,sans-serif;
   background:#111;
   color:white;
 }
+
 .header{
-  padding:30px 20px;
+  padding:28px 20px;
   background:#1b1b1b;
 }
+
 .header h1{
   margin:0;
   font-size:28px;
 }
+
 .header p{
+  margin:8px 0 0;
   color:#aaa;
 }
+
 .btn{
   display:block;
   margin:20px;
@@ -31,17 +41,47 @@ body{
   text-align:center;
   border-radius:10px;
   font-weight:bold;
+  font-size:17px;
+  border:0;
+  width:calc(100% - 40px);
 }
+
 .card{
   margin:15px 20px;
   padding:18px;
   background:#202020;
   border-radius:12px;
 }
+
 .price{
   color:#e4b85c;
   font-size:20px;
   font-weight:bold;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:14px;
+  margin:8px 0 14px;
+  border:0;
+  border-radius:8px;
+  background:#292929;
+  color:white;
+  font-size:16px;
+}
+
+label{
+  color:#ccc;
+}
+
+.form{
+  margin:20px;
+}
+
+.back{
+  color:#d6a84f;
+  margin:20px;
+  display:block;
 }
 </style>
 </head>
@@ -53,7 +93,11 @@ body{
   <p>找到靠谱队友，一起突围</p>
 </div>
 
-<div class="btn">＋ 发布护航</div>
+<button class="btn" onclick="showPublish()">
+  ＋ 发布护航
+</button>
+
+<div id="home">
 
 <h2 style="margin:20px;">护航大厅</h2>
 
@@ -70,6 +114,94 @@ body{
   <p>🎯 高难度任务协助</p>
   <p class="price">¥20 / 局</p>
 </div>
+
+</div>
+
+
+<div id="publish" style="display:none;">
+
+<a class="back" onclick="showHome()">← 返回护航大厅</a>
+
+<h2 style="margin:20px;">发布护航</h2>
+
+<div class="form">
+
+<label>游戏地图</label>
+
+<select id="map">
+  <option>长弓溪谷</option>
+  <option>零号大坝</option>
+  <option>航天基地</option>
+  <option>巴克什</option>
+</select>
+
+<label>护航类型</label>
+
+<select id="type">
+  <option>摸金护航</option>
+  <option>战斗护航</option>
+  <option>任务协助</option>
+  <option>新手带玩</option>
+</select>
+
+<label>护航时间</label>
+
+<input id="time" type="text" placeholder="例如：今天 20:00">
+
+<label>价格</label>
+
+<input id="price" type="number" placeholder="例如：10">
+
+<label>护航说明</label>
+
+<textarea id="desc" rows="4" placeholder="请输入你的需求"></textarea>
+
+<button class="btn" onclick="publishOrder()">
+  发布护航
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+function showPublish(){
+  document.getElementById("home").style.display="none";
+  document.getElementById("publish").style.display="block";
+}
+
+function showHome(){
+  document.getElementById("publish").style.display="none";
+  document.getElementById("home").style.display="block";
+}
+
+function publishOrder(){
+
+  let map=document.getElementById("map").value;
+  let type=document.getElementById("type").value;
+  let time=document.getElementById("time").value;
+  let price=document.getElementById("price").value;
+  let desc=document.getElementById("desc").value;
+
+  if(!time || !price){
+    alert("请填写护航时间和价格");
+    return;
+  }
+
+  alert(
+    "发布成功！\n\n" +
+    map + " · " + type + "\n" +
+    "时间：" + time + "\n" +
+    "价格：¥" + price + "\n" +
+    "说明：" + (desc || "无")
+  );
+
+  showHome();
+}
+
+</script>
 
 </body>
 </html>
