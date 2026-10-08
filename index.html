@@ -10,33 +10,68 @@
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",Arial,sans-serif;
-  background:#111;color:white
+  background:#111;
+  color:white;
 }
-.header{padding:28px 20px;background:#1b1b1b}
+.header{
+  padding:28px 20px;
+  background:#1b1b1b;
+}
 .header h1{margin:0;font-size:28px}
 .header p{margin:8px 0 0;color:#aaa}
 .btn{
-  display:block;margin:20px;padding:16px;
-  background:#d6a84f;color:#111;text-align:center;
-  border-radius:10px;font-weight:bold;font-size:17px;
-  border:0;width:calc(100% - 40px)
+  display:block;
+  margin:20px;
+  padding:16px;
+  background:#d6a84f;
+  color:#111;
+  text-align:center;
+  border-radius:10px;
+  font-weight:bold;
+  font-size:17px;
+  border:0;
+  width:calc(100% - 40px);
 }
-.card{margin:15px 20px;padding:18px;background:#202020;border-radius:12px}
-.price{color:#e4b85c;font-size:20px;font-weight:bold}
+.card{
+  margin:15px 20px;
+  padding:18px;
+  background:#202020;
+  border-radius:12px;
+}
+.price{
+  color:#e4b85c;
+  font-size:20px;
+  font-weight:bold;
+}
 input,select,textarea{
-  width:100%;padding:14px;margin:8px 0 14px;
-  border:0;border-radius:8px;background:#292929;
-  color:white;font-size:16px
+  width:100%;
+  padding:14px;
+  margin:8px 0 14px;
+  border:0;
+  border-radius:8px;
+  background:#292929;
+  color:white;
+  font-size:16px;
 }
 label{color:#ccc}
 .form{margin:20px}
-.back{color:#d6a84f;margin:20px;display:block}
-.status{color:#9bd6a5}
-.small-btn{
-  border:0;border-radius:8px;padding:12px 18px;
-  background:#d6a84f;color:#111;font-size:16px;font-weight:bold
+.back{
+  color:#d6a84f;
+  margin:20px;
+  display:block;
 }
+.small-btn{
+  border:0;
+  border-radius:8px;
+  padding:12px 18px;
+  background:#d6a84f;
+  color:#111;
+  font-size:16px;
+  font-weight:bold;
+}
+.status{color:#9bd6a5}
 .empty{margin:20px;color:#aaa}
+.loading{margin:20px;color:#aaa}
 </style>
 </head>
 
@@ -51,117 +86,169 @@ label{color:#ccc}
 
 <div id="home">
   <h2 style="margin:20px">护航大厅</h2>
-  <div id="orderList"></div>
+  <div id="orderList" class="loading">正在加载护航...</div>
 </div>
 
 <div id="publish" style="display:none">
-  <a class="back" onclick="showHome()">← 返回护航大厅</a>
-  <h2 style="margin:20px">发布护航</h2>
 
-  <div class="form">
-    <label>游戏地图</label>
-    <select id="map">
-      <option>长弓溪谷</option>
-      <option>零号大坝</option>
-      <option>航天基地</option>
-      <option>巴克什</option>
-    </select>
+<a class="back" onclick="showHome()">← 返回护航大厅</a>
 
-    <label>护航类型</label>
-    <select id="type">
-      <option>摸金护航</option>
-      <option>战斗护航</option>
-      <option>任务协助</option>
-      <option>新手带玩</option>
-    </select>
+<h2 style="margin:20px">发布护航</h2>
 
-    <label>护航时间</label>
-    <input id="time" type="text" placeholder="例如：今天 20:00">
+<div class="form">
 
-    <label>价格（元）</label>
-    <input id="price" type="number" min="0" placeholder="例如：10">
+<label>游戏地图</label>
+<select id="map">
+  <option>长弓溪谷</option>
+  <option>零号大坝</option>
+  <option>航天基地</option>
+  <option>巴克什</option>
+</select>
 
-    <label>护航说明</label>
-    <textarea id="desc" rows="4" placeholder="请输入你的需求"></textarea>
+<label>护航类型</label>
+<select id="type">
+  <option>摸金护航</option>
+  <option>战斗护航</option>
+  <option>任务协助</option>
+  <option>新手带玩</option>
+</select>
 
-    <button class="btn" onclick="publishOrder()">发布护航</button>
-  </div>
+<label>护航时间</label>
+<input id="time" type="text" placeholder="例如：今天 20:00">
+
+<label>价格（元）</label>
+<input id="price" type="number" min="0" placeholder="例如：10">
+
+<label>护航说明</label>
+<textarea id="desc" rows="4" placeholder="请输入你的需求"></textarea>
+
+<button class="btn" onclick="publishOrder()">发布护航</button>
+
+</div>
 </div>
 
 <script>
-const STORAGE_KEY = "deltaEscortOrders";
 
-function getOrders(){
-  try{
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if(saved !== null) return JSON.parse(saved);
-  }catch(e){}
-  return [
-    {
-      id:"demo1",
-      map:"长弓溪谷",
-      type:"摸金护航",
-      time:"今天 20:00",
-      price:"10",
-      desc:"带新手熟悉地图",
-      accepted:false
-    },
-    {
-      id:"demo2",
-      map:"零号大坝",
-      type:"战斗护航",
-      time:"今天 21:30",
-      price:"20",
-      desc:"高难度任务协助",
-      accepted:false
-    }
-  ];
+/* ===== Supabase 配置 ===== */
+
+const SUPABASE_URL = "https://mpceoujqmqniynbczqyv.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_jo4VgMX69mZAeEeEUE4pYQ_gHf64ZGZ";
+
+
+/* ===== 请求头 ===== */
+
+function headers(){
+  return {
+    "apikey": SUPABASE_KEY,
+    "Authorization": "Bearer " + SUPABASE_KEY,
+    "Content-Type": "application/json"
+  };
 }
 
-let orders = getOrders();
 
-function saveOrders(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
-}
+/* ===== 获取所有护航 ===== */
 
-function renderOrders(){
+async function loadOrders(){
+
   const list = document.getElementById("orderList");
+
+  list.innerHTML = '<div class="loading">正在加载护航...</div>';
+
+  try{
+
+    const response = await fetch(
+      SUPABASE_URL + "/rest/v1/orders?select=*",
+      {
+        method:"GET",
+        headers:headers()
+      }
+    );
+
+    if(!response.ok){
+      throw new Error("读取订单失败");
+    }
+
+    const data = await response.json();
+
+    renderOrders(data);
+
+  }catch(error){
+
+    console.error(error);
+
+    list.innerHTML =
+      '<div class="empty">订单加载失败，请刷新网页重试。</div>';
+  }
+}
+
+
+/* ===== 显示订单 ===== */
+
+function renderOrders(orders){
+
+  const list = document.getElementById("orderList");
+
   list.innerHTML = "";
 
-  if(orders.length === 0){
-    list.innerHTML = '<p class="empty">暂无护航，快来发布第一条吧！</p>';
+  if(!orders || orders.length === 0){
+
+    list.innerHTML =
+      '<div class="empty">暂无护航，快来发布第一条吧！</div>';
+
     return;
   }
 
   orders.forEach(order => {
+
     const card = document.createElement("div");
     card.className = "card";
 
     const title = document.createElement("h3");
-    title.textContent = order.map + " · " + order.type;
+    title.textContent =
+      order.map + " · " + order.type;
 
     const time = document.createElement("p");
-    time.textContent = "🕐 " + order.time;
+    time.textContent =
+      "🕐 " + order.time;
 
     const desc = document.createElement("p");
-    desc.textContent = "🎯 " + (order.desc || "暂无说明");
+    desc.textContent =
+      "🎯 " + (order.desc || "暂无说明");
 
     const price = document.createElement("p");
     price.className = "price";
-    price.textContent = "¥" + order.price + " / 局";
+    price.textContent =
+      "¥" + order.price + " / 局";
 
-    card.append(title, time, desc, price);
+    card.appendChild(title);
+    card.appendChild(time);
+    card.appendChild(desc);
+    card.appendChild(price);
 
     if(order.accepted){
+
       const status = document.createElement("p");
+
       status.className = "status";
-      status.textContent = "✓ 已有人接单";
+
+      status.textContent =
+        "✓ 已有人接单";
+
       card.appendChild(status);
+
     }else{
+
       const button = document.createElement("button");
+
       button.className = "small-btn";
+
       button.textContent = "接单";
-      button.onclick = () => acceptOrder(order.id);
+
+      button.onclick = function(){
+        acceptOrder(order.id);
+      };
+
       card.appendChild(button);
     }
 
@@ -169,62 +256,170 @@ function renderOrders(){
   });
 }
 
+
+/* ===== 发布页面 ===== */
+
 function showPublish(){
+
   document.getElementById("home").style.display = "none";
+
   document.getElementById("publish").style.display = "block";
 }
 
+
 function showHome(){
+
   document.getElementById("publish").style.display = "none";
+
   document.getElementById("home").style.display = "block";
-  renderOrders();
+
+  loadOrders();
 }
 
-function publishOrder(){
-  const map = document.getElementById("map").value;
-  const type = document.getElementById("type").value;
-  const time = document.getElementById("time").value.trim();
-  const price = document.getElementById("price").value;
-  const desc = document.getElementById("desc").value.trim();
 
-  if(!time || price === "" || Number(price) < 0){
-    alert("请填写正确的护航时间和价格");
+/* ===== 发布护航 ===== */
+
+async function publishOrder(){
+
+  const map =
+    document.getElementById("map").value;
+
+  const type =
+    document.getElementById("type").value;
+
+  const time =
+    document.getElementById("time").value.trim();
+
+  const price =
+    document.getElementById("price").value;
+
+  const desc =
+    document.getElementById("desc").value.trim();
+
+
+  if(!time || price === ""){
+
+    alert("请填写护航时间和价格");
+
     return;
   }
 
-  orders.unshift({
-    id:Date.now().toString(),
-    map:map,
-    type:type,
-    time:time,
-    price:price,
-    desc:desc,
-    accepted:false
-  });
 
-  saveOrders();
+  try{
 
-  document.getElementById("time").value = "";
-  document.getElementById("price").value = "";
-  document.getElementById("desc").value = "";
+    const response = await fetch(
+      SUPABASE_URL + "/rest/v1/orders",
+      {
+        method:"POST",
 
-  alert("发布成功！已添加到护航大厅。");
-  showHome();
-}
+        headers:{
+          ...headers(),
+          "Prefer":"return=representation"
+        },
 
-function acceptOrder(id){
-  const order = orders.find(item => item.id === id);
-  if(!order || order.accepted) return;
+        body:JSON.stringify({
+          map:map,
+          type:type,
+          time:time,
+          price:Number(price),
+          desc:desc,
+          accepted:false
+        })
+      }
+    );
 
-  if(confirm("确定要接下这条护航吗？")){
-    order.accepted = true;
-    saveOrders();
-    renderOrders();
-    alert("接单成功！");
+
+    if(!response.ok){
+
+      const errorText =
+        await response.text();
+
+      console.error(errorText);
+
+      throw new Error("发布失败");
+    }
+
+
+    alert("发布成功！");
+
+    document.getElementById("time").value = "";
+
+    document.getElementById("price").value = "";
+
+    document.getElementById("desc").value = "";
+
+    showHome();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("发布失败，请检查网络后重试。");
   }
 }
 
-renderOrders();
+
+/* ===== 接单 ===== */
+
+async function acceptOrder(id){
+
+  if(!confirm("确定要接下这条护航吗？")){
+
+    return;
+  }
+
+
+  try{
+
+    const response = await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/orders?id=eq." +
+      encodeURIComponent(id),
+
+      {
+        method:"PATCH",
+
+        headers:{
+          ...headers(),
+          "Prefer":"return=representation"
+        },
+
+        body:JSON.stringify({
+          accepted:true
+        })
+      }
+    );
+
+
+    if(!response.ok){
+
+      const errorText =
+        await response.text();
+
+      console.error(errorText);
+
+      throw new Error("接单失败");
+    }
+
+
+    alert("接单成功！");
+
+    loadOrders();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("接单失败，请重试。");
+  }
+}
+
+
+/* ===== 打开网站时自动加载 ===== */
+
+loadOrders();
+
 </script>
 
 </body>
