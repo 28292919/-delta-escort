@@ -6,83 +6,37 @@
 <title>三角洲护航</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
-
+*{box-sizing:border-box}
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",Arial,sans-serif;
-  background:#111;
-  color:white;
+  background:#111;color:white
 }
-
-.header{
-  padding:28px 20px;
-  background:#1b1b1b;
-}
-
-.header h1{
-  margin:0;
-  font-size:28px;
-}
-
-.header p{
-  margin:8px 0 0;
-  color:#aaa;
-}
-
+.header{padding:28px 20px;background:#1b1b1b}
+.header h1{margin:0;font-size:28px}
+.header p{margin:8px 0 0;color:#aaa}
 .btn{
-  display:block;
-  margin:20px;
-  padding:16px;
-  background:#d6a84f;
-  color:#111;
-  text-align:center;
-  border-radius:10px;
-  font-weight:bold;
-  font-size:17px;
-  border:0;
-  width:calc(100% - 40px);
+  display:block;margin:20px;padding:16px;
+  background:#d6a84f;color:#111;text-align:center;
+  border-radius:10px;font-weight:bold;font-size:17px;
+  border:0;width:calc(100% - 40px)
 }
-
-.card{
-  margin:15px 20px;
-  padding:18px;
-  background:#202020;
-  border-radius:12px;
-}
-
-.price{
-  color:#e4b85c;
-  font-size:20px;
-  font-weight:bold;
-}
-
+.card{margin:15px 20px;padding:18px;background:#202020;border-radius:12px}
+.price{color:#e4b85c;font-size:20px;font-weight:bold}
 input,select,textarea{
-  width:100%;
-  padding:14px;
-  margin:8px 0 14px;
-  border:0;
-  border-radius:8px;
-  background:#292929;
-  color:white;
-  font-size:16px;
+  width:100%;padding:14px;margin:8px 0 14px;
+  border:0;border-radius:8px;background:#292929;
+  color:white;font-size:16px
 }
-
-label{
-  color:#ccc;
+label{color:#ccc}
+.form{margin:20px}
+.back{color:#d6a84f;margin:20px;display:block}
+.status{color:#9bd6a5}
+.small-btn{
+  border:0;border-radius:8px;padding:12px 18px;
+  background:#d6a84f;color:#111;font-size:16px;font-weight:bold
 }
-
-.form{
-  margin:20px;
-}
-
-.back{
-  color:#d6a84f;
-  margin:20px;
-  display:block;
-}
+.empty{margin:20px;color:#aaa}
 </style>
 </head>
 
@@ -93,114 +47,184 @@ label{
   <p>找到靠谱队友，一起突围</p>
 </div>
 
-<button class="btn" onclick="showPublish()">
-  ＋ 发布护航
-</button>
+<button class="btn" onclick="showPublish()">＋ 发布护航</button>
 
 <div id="home">
-
-<h2 style="margin:20px;">护航大厅</h2>
-
-<div class="card">
-  <h3>长弓溪谷 · 摸金护航</h3>
-  <p>🕐 今天 20:00</p>
-  <p>🎯 带新手熟悉地图</p>
-  <p class="price">¥10 / 局</p>
+  <h2 style="margin:20px">护航大厅</h2>
+  <div id="orderList"></div>
 </div>
 
-<div class="card">
-  <h3>零号大坝 · 战斗护航</h3>
-  <p>🕐 今天 21:30</p>
-  <p>🎯 高难度任务协助</p>
-  <p class="price">¥20 / 局</p>
+<div id="publish" style="display:none">
+  <a class="back" onclick="showHome()">← 返回护航大厅</a>
+  <h2 style="margin:20px">发布护航</h2>
+
+  <div class="form">
+    <label>游戏地图</label>
+    <select id="map">
+      <option>长弓溪谷</option>
+      <option>零号大坝</option>
+      <option>航天基地</option>
+      <option>巴克什</option>
+    </select>
+
+    <label>护航类型</label>
+    <select id="type">
+      <option>摸金护航</option>
+      <option>战斗护航</option>
+      <option>任务协助</option>
+      <option>新手带玩</option>
+    </select>
+
+    <label>护航时间</label>
+    <input id="time" type="text" placeholder="例如：今天 20:00">
+
+    <label>价格（元）</label>
+    <input id="price" type="number" min="0" placeholder="例如：10">
+
+    <label>护航说明</label>
+    <textarea id="desc" rows="4" placeholder="请输入你的需求"></textarea>
+
+    <button class="btn" onclick="publishOrder()">发布护航</button>
+  </div>
 </div>
-
-</div>
-
-
-<div id="publish" style="display:none;">
-
-<a class="back" onclick="showHome()">← 返回护航大厅</a>
-
-<h2 style="margin:20px;">发布护航</h2>
-
-<div class="form">
-
-<label>游戏地图</label>
-
-<select id="map">
-  <option>长弓溪谷</option>
-  <option>零号大坝</option>
-  <option>航天基地</option>
-  <option>巴克什</option>
-</select>
-
-<label>护航类型</label>
-
-<select id="type">
-  <option>摸金护航</option>
-  <option>战斗护航</option>
-  <option>任务协助</option>
-  <option>新手带玩</option>
-</select>
-
-<label>护航时间</label>
-
-<input id="time" type="text" placeholder="例如：今天 20:00">
-
-<label>价格</label>
-
-<input id="price" type="number" placeholder="例如：10">
-
-<label>护航说明</label>
-
-<textarea id="desc" rows="4" placeholder="请输入你的需求"></textarea>
-
-<button class="btn" onclick="publishOrder()">
-  发布护航
-</button>
-
-</div>
-
-</div>
-
 
 <script>
+const STORAGE_KEY = "deltaEscortOrders";
 
-function showPublish(){
-  document.getElementById("home").style.display="none";
-  document.getElementById("publish").style.display="block";
+function getOrders(){
+  try{
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if(saved !== null) return JSON.parse(saved);
+  }catch(e){}
+  return [
+    {
+      id:"demo1",
+      map:"长弓溪谷",
+      type:"摸金护航",
+      time:"今天 20:00",
+      price:"10",
+      desc:"带新手熟悉地图",
+      accepted:false
+    },
+    {
+      id:"demo2",
+      map:"零号大坝",
+      type:"战斗护航",
+      time:"今天 21:30",
+      price:"20",
+      desc:"高难度任务协助",
+      accepted:false
+    }
+  ];
 }
 
-function showHome(){
-  document.getElementById("publish").style.display="none";
-  document.getElementById("home").style.display="block";
+let orders = getOrders();
+
+function saveOrders(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
 }
 
-function publishOrder(){
+function renderOrders(){
+  const list = document.getElementById("orderList");
+  list.innerHTML = "";
 
-  let map=document.getElementById("map").value;
-  let type=document.getElementById("type").value;
-  let time=document.getElementById("time").value;
-  let price=document.getElementById("price").value;
-  let desc=document.getElementById("desc").value;
-
-  if(!time || !price){
-    alert("请填写护航时间和价格");
+  if(orders.length === 0){
+    list.innerHTML = '<p class="empty">暂无护航，快来发布第一条吧！</p>';
     return;
   }
 
-  alert(
-    "发布成功！\n\n" +
-    map + " · " + type + "\n" +
-    "时间：" + time + "\n" +
-    "价格：¥" + price + "\n" +
-    "说明：" + (desc || "无")
-  );
+  orders.forEach(order => {
+    const card = document.createElement("div");
+    card.className = "card";
 
+    const title = document.createElement("h3");
+    title.textContent = order.map + " · " + order.type;
+
+    const time = document.createElement("p");
+    time.textContent = "🕐 " + order.time;
+
+    const desc = document.createElement("p");
+    desc.textContent = "🎯 " + (order.desc || "暂无说明");
+
+    const price = document.createElement("p");
+    price.className = "price";
+    price.textContent = "¥" + order.price + " / 局";
+
+    card.append(title, time, desc, price);
+
+    if(order.accepted){
+      const status = document.createElement("p");
+      status.className = "status";
+      status.textContent = "✓ 已有人接单";
+      card.appendChild(status);
+    }else{
+      const button = document.createElement("button");
+      button.className = "small-btn";
+      button.textContent = "接单";
+      button.onclick = () => acceptOrder(order.id);
+      card.appendChild(button);
+    }
+
+    list.appendChild(card);
+  });
+}
+
+function showPublish(){
+  document.getElementById("home").style.display = "none";
+  document.getElementById("publish").style.display = "block";
+}
+
+function showHome(){
+  document.getElementById("publish").style.display = "none";
+  document.getElementById("home").style.display = "block";
+  renderOrders();
+}
+
+function publishOrder(){
+  const map = document.getElementById("map").value;
+  const type = document.getElementById("type").value;
+  const time = document.getElementById("time").value.trim();
+  const price = document.getElementById("price").value;
+  const desc = document.getElementById("desc").value.trim();
+
+  if(!time || price === "" || Number(price) < 0){
+    alert("请填写正确的护航时间和价格");
+    return;
+  }
+
+  orders.unshift({
+    id:Date.now().toString(),
+    map:map,
+    type:type,
+    time:time,
+    price:price,
+    desc:desc,
+    accepted:false
+  });
+
+  saveOrders();
+
+  document.getElementById("time").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("desc").value = "";
+
+  alert("发布成功！已添加到护航大厅。");
   showHome();
 }
 
+function acceptOrder(id){
+  const order = orders.find(item => item.id === id);
+  if(!order || order.accepted) return;
+
+  if(confirm("确定要接下这条护航吗？")){
+    order.accepted = true;
+    saveOrders();
+    renderOrders();
+    alert("接单成功！");
+  }
+}
+
+renderOrders();
 </script>
 
 </body>
